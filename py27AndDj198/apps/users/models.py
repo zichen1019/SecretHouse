@@ -1,6 +1,7 @@
 # -*- coding:UTF-8 -*-
 """
-
+xadmin github https://github.com/sshwsfc/xadmin
+http://localhost:8000/xadmin/ 登录页面
 管理员设置成了 用户：admin 密码：adminroot 邮箱：1510748736@qq.com
 
 导包分三个区域，每个区域用空一行分割
@@ -25,6 +26,8 @@ class UserProfile(AbstractUser):
     addres = models.CharField(max_length=100,default=u"")
     mobile = models.CharField(max_length=11, null=True, blank=True)
     image = models.ImageField(upload_to="image/%Y/%m", default="image/default.png")
+    token = models.CharField(max_length=128, verbose_name=u"验证", null=True, blank=True)
+    ipaddr = models.GenericIPAddressField(protocol="ipv4", verbose_name=u"登录IP", null=True, blank=True)
 
     class Meta:
         verbose_name = "用户信息"

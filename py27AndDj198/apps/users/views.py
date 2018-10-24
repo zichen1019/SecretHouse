@@ -8,6 +8,12 @@ from django.db.models import Q
 from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
 from django.http import HttpResponse, JsonResponse
+# 获取token
+from django.middleware.csrf import get_token
+# 关闭csrf验证，用于某个方法在方法上一行加@csrf_exempt
+from django.views.decorators.csrf import csrf_exempt
+# 将model转化为dict
+from django.forms.models import model_to_dict
 
 from .forms import LoginForm, RegisterForm
 from .models import UserProfile, UserAttr
@@ -148,3 +154,38 @@ class PersonalAttrViewList(View):
 
     def post(self, request):
         return JsonResponse({'success': False, 'reason': '请求未处理！'})
+
+
+class ApiLoginView(View):
+
+    def get(self, request):
+        token = request.GET.get('token', '')
+        user_profile = UserProfile.objects.get(token=token)
+        if user_profile:
+            user = model_to_dict(user_profile)
+            user['roles'] = ['admin']
+            user['image'] = str(user['image'])
+            return JsonResponse({'success': True, 'user': user})
+        else:
+            return JsonResponse({'success': False})
+
+    def post(self, request):
+        obj = json.loads(request.body)
+        username = obj['username']
+        password = obj['password']
+        token = request.COOKIES['csrftoken']
+        print('username:' + username + '    ' + 'password:' + password+'     '+'token:'+token)
+        user_profile = authenticate(username=username, password=password)
+        if user_profile is not None:
+            user_profile.token = token
+            user_profile.save()
+            return JsonResponse({'success': True, 'token': token})
+        else:
+            return JsonResponse({'success': False})
+
+
+class Tokens(View):
+
+    def get(self, request):
+        token = get_token(request)
+        return JsonResponse({'success': True, 'token': token})

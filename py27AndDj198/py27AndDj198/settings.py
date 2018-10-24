@@ -26,8 +26,12 @@ SECRET_KEY = 't3^v#6g728gk45h0)mtlrtx7dn5a6c1-2k7%+%&$+f_8e$#1i('
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = []
+# all ip
+ALLOWED_HOSTS = ['*']
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+# all headers
+CORS_ALLOW_HEADERS = ('*')
 
 
 # Application definition
