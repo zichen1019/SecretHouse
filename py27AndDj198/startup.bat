@@ -1,0 +1,1 @@
+python D:\projects\SecretHouse\py27AndDj198\manage.py runserver
