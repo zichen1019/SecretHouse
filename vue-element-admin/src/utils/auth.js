@@ -19,23 +19,7 @@ function getCookie(name) {
   return cookieValue;
 }
 var csrftoken = getCookie('csrftoken');
- function csrfSafeMethod(method) {
-     // these HTTP methods do not require CSRF protection
-     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
- }
-// 主动获取csrftoken --结束
-
 export function getToken() {
-  // 主动获取csrftoken --调用
-  // 给ajax请求设置请求头x-csrftoken
-  $.ajaxSetup({
-    crossDomain: false, // obviates need for sameOrigin test
-    beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type)) {
-            xhr.setRequestHeader("csrftoken", csrftoken);
-        }
-    }
-  });
   return Cookies.get(TokenKey)
 }
 

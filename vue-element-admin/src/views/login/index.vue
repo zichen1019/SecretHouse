@@ -66,6 +66,8 @@
 import { isvalidUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
+import { getSeverToken }  from '@/api/login'
+import { setToken,getToken } from '@/utils/auth'
 
 export default {
   name: 'Login',
@@ -88,7 +90,7 @@ export default {
     return {
       loginForm: {
         username: 'admin',
-        password: '1111111'
+        password: 'adminroot'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -111,6 +113,12 @@ export default {
   },
   created() {
     // window.addEventListener('hashchange', this.afterQRScan)
+    // 先获取token
+    getSeverToken().then(response => {
+            let data = response.data
+            setToken(response.data.token)
+            getToken()
+          });
   },
   destroyed() {
     // window.removeEventListener('hashchange', this.afterQRScan)
@@ -129,9 +137,12 @@ export default {
           this.loading = true
           // 验证用户是否存在
           // 页面跳转
-          this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
+          this.$store.dispatch('LoginByUsername', this.loginForm).then(data => {
             this.loading = false
-            this.$router.push({ path: this.redirect || '/' })
+            //this.$router.push({ path: this.redirect || '/' })
+            if(data.success){
+              this.$router.push({ path:'/' })
+            }
           }).catch(() => {
             this.loading = false
           })

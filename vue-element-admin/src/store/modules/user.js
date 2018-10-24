@@ -6,9 +6,9 @@ const user = {
     user: '',
     status: '',
     code: '',
-    token: getToken(),
+    token: '',
     name: '',
-    avatar: '',
+    avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
     introduction: '',
     roles: [],
     setting: {
@@ -50,9 +50,9 @@ const user = {
       return new Promise((resolve, reject) => {
         loginByUsername(username, userInfo.password).then(response => {
           const data = response.data
+          console.log(data);
           commit('SET_TOKEN', data.token)
-          setToken(response.data.token)
-          resolve()
+          resolve(data)
         }).catch(error => {
           reject(error)
         })
@@ -63,10 +63,12 @@ const user = {
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getUserInfo(state.token).then(response => {
-          if (!response.data) { // 由于mockjs 不支持自定义状态码只能这样hack
+          console.log('GetUserInfo');
+          console.log(response.data);
+          if (!response.data.success) { // 由于mockjs 不支持自定义状态码只能这样hack
             reject('error')
           }
-          const data = response.data
+          const data = response.data.user
 
           if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
             commit('SET_ROLES', data.roles)
@@ -74,10 +76,12 @@ const user = {
             reject('getInfo: roles must be a non-null array !')
           }
 
-          commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
-          commit('SET_INTRODUCTION', data.introduction)
-          resolve(response)
+          commit('SET_NAME', data.username)
+          //commit('SET_AVATAR', data.avatar)
+          commit('SET_INTRODUCTION', data.nick_name)
+          //此处的转换为了对应permission的数据处理方式
+          let result = {'data':data}
+          resolve(result)
         }).catch(error => {
           reject(error)
         })
