@@ -163,7 +163,7 @@ class ApiLoginView(View):
         user_profile = UserProfile.objects.get(token=token)
         if user_profile:
             user = model_to_dict(user_profile)
-            user['roles'] = ['admin']
+            user['roles'] = ['editor']
             user['image'] = str(user['image'])
             return JsonResponse({'success': True, 'user': user})
         else:
