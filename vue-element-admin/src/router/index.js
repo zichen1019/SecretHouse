@@ -221,13 +221,20 @@ export const asyncRouterMap = [
     component: Layout,
     children: [
       {
-        path: 'love',
-        component: () => import('@/views/zc/love'),
-        name: 'love',
-        meta: { title: 'love', icon: 'star' }
+        path: 'huts',
+        component: () => import('@/views/zc/huts'),
+        name: 'huts',
+        meta: { title: 'huts', icon: 'star' }
       },
       {
-        path: 'edit/:annalid',
+        path: 'love/:annalid',
+        component: () => import('@/views/zc/love'),
+        name: 'love',
+        meta: { title: 'love', icon: 'edit' },
+        hidden: true
+      },
+      {
+        path: 'edit/:annalid/:zjid',
         component: () => import('@/views/zc/edit'),
         name: 'EditEvaluate',
         meta: { title: 'EditEvaluate', icon: 'edit' },

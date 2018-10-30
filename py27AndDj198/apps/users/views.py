@@ -6,7 +6,9 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q
 from django.views.generic.base import View
+# 密码转换方法
 from django.contrib.auth.hashers import make_password
+# 返回json格式数据
 from django.http import HttpResponse, JsonResponse
 # 获取token
 from django.middleware.csrf import get_token
@@ -124,7 +126,11 @@ class PersonalAttrView(View):
         '''
         attr = UserAttr()
         obj = json.loads(request.body)
-        attr.id = obj['id']
+        if obj['id']:
+            attr.id = obj['id']
+        else:
+            print(UserAttr.objects.latest('id'))
+            attr.id = UserAttr.objects.latest('id').id+1
         attr.attrname = obj['attrname']
         attr.features = obj['features']
         attr.progress = obj['progress']
@@ -141,7 +147,7 @@ class PersonalAttrViewList(View):
 
     def get(self, request):
         '''
-        获取个人所有信息
+        获取个人所有属性信息
         :param request:
         :return:
         '''
@@ -153,23 +159,44 @@ class PersonalAttrViewList(View):
         return JsonResponse({'success': False, 'reason': '用户不存在！'})
 
     def post(self, request):
-        return JsonResponse({'success': False, 'reason': '请求未处理！'})
+        '''
+        此处用作删除属性
+        :param request:
+        :return:
+        '''
+        obj = json.loads(request.body)
+        UserAttr.objects.get(id=obj['id']).delete()
+        return JsonResponse({'success': True})
 
 
 class ApiLoginView(View):
 
     def get(self, request):
+        '''
+        根据token获取用户信息：判断用户是否成功登录，并且返回用户信息
+        :param request:
+        :return:
+        '''
         token = request.GET.get('token', '')
         user_profile = UserProfile.objects.get(token=token)
         if user_profile:
             user = model_to_dict(user_profile)
-            user['roles'] = ['editor']
+            if(user_profile.is_superuser == True):
+                isAdmin = "admin"
+            else:
+                isAdmin = "editor"
+            user['roles'] = [isAdmin]
             user['image'] = str(user['image'])
             return JsonResponse({'success': True, 'user': user})
         else:
             return JsonResponse({'success': False})
 
     def post(self, request):
+        '''
+        登录方法：判断用户是否存在，并返回token
+        :param request:
+        :return:
+        '''
         obj = json.loads(request.body)
         username = obj['username']
         password = obj['password']
@@ -187,5 +214,10 @@ class ApiLoginView(View):
 class Tokens(View):
 
     def get(self, request):
+        '''
+        获取token
+        :param request: 
+        :return: 
+        '''
         token = get_token(request)
         return JsonResponse({'success': True, 'token': token})

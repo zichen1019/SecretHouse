@@ -1,6 +1,6 @@
 <template>
     <el-container>
-        <el-header>Header</el-header>
+        <!--<el-header>Header</el-header>-->
         <el-container>
             <el-main width="50%">
                  <div class="left-container"  style="margin:auto 20%;padding-bottom: 20px;">
@@ -9,12 +9,12 @@
                               <img src="https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png">
                             </div>
                             <div style="position:relative;">
-                              <pan-thumb :image="avatarNan" class="panThumb"/>
-                              <mallki class-name="mallki-text" text="李小磊"/>
+                              <pan-thumb :image="nanZJ.avatar" class="panThumb"/>
+                              <mallki class-name="mallki-text" :text="nanZJ.name"/>
                               <div style="padding-top:35px;" class="progress-item">
                                     <el-tag>属性分评</el-tag>
                               </div>
-                              <el-collapse accordion>
+                              <el-collapse accordion :loading="loading.nan">
                                 <div v-for="NanProgress in NanProgressList" class="progress-item">
                                   <el-collapse-item>
                                     <template slot="title">
@@ -28,9 +28,27 @@
                                     <el-card shadow="hover" class="box-card">
                                         <div slot="header" class="clearfix">
                                           <span class="features" style="height: 46px;line-height: 46px;">评价：</span>
-                                          <router-link :to="'/zc/edit/'+NanProgress.id">
-                                            <el-button style="float: right;" class="features" type="text"><i class="el-icon-edit"></i></el-button>
-                                          </router-link>
+                                          
+                                          <el-dropdown style="float: right;" class="features" v-if="user == nvZJ.user">
+                                              <span class="el-dropdown-link">
+                                                  <el-button type="primary" size="mini" circle icon="el-icon-more"></el-button>
+                                              </span>
+                                              <el-dropdown-menu slot="dropdown">
+                                                  <router-link :to="'/zc/edit/'+NanProgress.id">
+                                                    <el-dropdown-item>
+                                                        <el-button class="dorpdownItem" circle size="mini" icon="el-icon-edit"></el-button>
+                                                    </el-dropdown-item>
+                                                  </router-link>
+                                                  <router-link :to="'/zc/edit/add/'+nanZJ.user">
+                                                    <el-dropdown-item>
+                                                        <el-button class="dorpdownItem" circle size="mini" icon="el-icon-plus"></el-button>
+                                                    </el-dropdown-item>
+                                                  </router-link>
+                                                  <el-dropdown-item>
+                                                      <el-button class="dorpdownItem" circle size="mini" icon="el-icon-delete" @click="deleteAttr(NanProgress.id)"></el-button>
+                                                  </el-dropdown-item>
+                                              </el-dropdown-menu>
+                                            </el-dropdown>
                                         </div>
                                         <span class="">&emsp;&emsp;{{ NanProgress.features }}</span>
                                     </el-card>
@@ -48,12 +66,12 @@
                                 <img src="https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png">
                               </div>
                               <div style="position:relative;">
-                                <pan-thumb :image="avatarNv" class="panThumb"/>
-                                <mallki class-name="mallki-text" text="小懒猫-张凤姣"/>
+                                <pan-thumb :image="nvZJ.avatar" class="panThumb"/>
+                                <mallki class-name="mallki-text" :text="nvZJ.name"/>
                                 <div style="padding-top:35px;" class="progress-item">
                                   <el-tag>属性分评</el-tag>
                                 </div>
-                                <el-collapse accordion>
+                                <el-collapse accordion :loading="loading.nv">
                                   <div v-for="NvProgress in NvProgressList" class="progress-item">
                                     <el-collapse-item>
                                       <template slot="title">
@@ -67,9 +85,27 @@
                                       <el-card shadow="hover" class="box-card">
                                           <div slot="header" class="clearfix">
                                             <span class="features" style="height: 46px;line-height: 46px;">评价：</span>
-                                            <router-link :to="'/zc/edit/'+NvProgress.id">
-                                              <el-button style="float: right;" class="features" type="text"><i class="el-icon-edit"></i></el-button>
-                                            </router-link>
+                                            
+                                            <el-dropdown style="float: right;" class="features" v-if="user == nanZJ.user">
+                                              <span class="el-dropdown-link">
+                                                  <el-button type="primary" size="mini" circle icon="el-icon-more"></el-button>
+                                              </span>
+                                              <el-dropdown-menu slot="dropdown">
+                                                  <router-link :to="'/zc/edit/'+NvProgress.id">
+                                                    <el-dropdown-item>
+                                                        <el-button class="dorpdownItem" circle size="mini" icon="el-icon-edit"></el-button>
+                                                    </el-dropdown-item>
+                                                  </router-link>
+                                                  <router-link :to="'/zc/edit/add/'+nvZJ.user">
+                                                    <el-dropdown-item>
+                                                        <el-button class="dorpdownItem" circle size="mini" icon="el-icon-plus"></el-button>
+                                                    </el-dropdown-item>
+                                                  </router-link>
+                                                  <el-dropdown-item>
+                                                      <el-button class="dorpdownItem" circle size="mini" icon="el-icon-delete" @click="deleteAttr(NvProgress.id)"></el-button>
+                                                  </el-dropdown-item>
+                                              </el-dropdown-menu>
+                                            </el-dropdown>
                                           </div>
                                           <span class="">&emsp;&emsp;{{ NvProgress.features }}</span>
                                       </el-card>
@@ -81,7 +117,7 @@
                           </div>
             </el-main>
         </el-container>
-        <el-footer>Footer</el-footer>
+        <!--<el-footer>Footer</el-footer>-->
     </el-container>
 </template>
 
@@ -113,7 +149,7 @@
         import PanThumb from '@/components/PanThumb'
         import Mallki from '@/components/TextHoverEffect/Mallki'
         import splitPane from 'vue-splitpane'
-        import { getAttributeList } from '@/api/zc'
+        import { getAttributeList, getCabinCrew, attrDelete } from '@/api/zc'
         
         export default {
           name: 'SplitpaneDemo',
@@ -122,36 +158,73 @@
             resize() {
               console.log('resize')
             },
+            deleteAttr(attrid) {
+              var data = {id: attrid}
+              attrDelete(data).then(response => {
+                if(response.data.success){
+                  // 还没有实现删除后刷新属性列表
+                  if(user == nvZJ.user){
+                    //说明只能编辑男生
+                    getNanProgressList()
+                  }else{
+                    //说明只能编辑女生
+                    getNvProgressList()
+                  }
+                }
+              })
+            },
+            getNanzjAnNvzj() {
+              var query = {'hut': this.$route.path.substring(this.$route.path.lastIndexOf('/')+1),
+                            'key': 123}
+              getCabinCrew(query).then(response => {
+                this.nanZJ = response.data.nanzj
+                this.nvZJ = response.data.nvzj
+              })
+            },
             getNanProgressList() {
-              var query = {'user': this.manId}
+              this.loading.nan = true
+              var query = {'user': this.nanZJ.user}
               getAttributeList(query).then(response => {
                 this.NanProgressList = response.data.attrList
+                this.loading.nan = false
               })
             },
             getNvProgressList() {
-              var query = {'user': this.menId}
+              this.loading.nv = true
+              var query = {'user': this.nvZJ.user}
               getAttributeList(query).then(response => {
                 this.NvProgressList = response.data.attrList
+                this.loading.nv = false
               })
             }
           },
           created () {
+            //根据房间id获取男女主角
+            this.getNanzjAnNvzj()
+            // 获取男女主角的属性信息
             this.getNanProgressList()
             this.getNvProgressList()
           },
           data() {
             return {
-              manId:1,// 男id  后期需要通过获取的方式获取用户id
-              menId:2,// 女id
               statisticsData: {
                 article_count: 1024,
                 pageviews_count: 1024
               },
-              avatarNan:"http://120.78.185.208/SecretHouse/NanZJ.jpg",
-              avatarNv:"http://120.78.185.208/SecretHouse/NvZJ.jpg",
+              loading: {
+                nan: false,
+                nv: false
+              },
+              nanZJ: {user: 1,name: '男主角',avatar: ''},
+              nvZJ: {user: 2,name: '女主角',avatar: ''},
               NanProgressList:[{id:0,user_id:0,attrname:'无',progress: 0,status:'',features:''}],
               NvProgressList:[{id:0,user_id:0,attrname:'无',progress: 0,status:'',features:''}]
             }
+          },
+          computed: {
+            ...mapGetters([
+              'user'
+            ])
           }
         }
         </script>
@@ -187,7 +260,11 @@
           }
         
           .features {
-            padding: 15px;
+            margin: 10px;
+          }
+
+          .dorpdownItem {
+            margin: 5px auto;
           }
         </style>
 

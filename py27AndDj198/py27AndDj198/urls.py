@@ -19,6 +19,7 @@ from django.views.generic import TemplateView
 import xadmin
 
 from users.views import *
+from hut.views import *
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
@@ -27,9 +28,11 @@ urlpatterns = [
     url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^register/$', RegisterView.as_view(), name='register'),
     url(r'^captcha/', include('captcha.urls')),
-    url(r'^api/getUserAttrList/', PersonalAttrViewList.as_view(), name='getUserAttrList'),
+    url(r'^api/userAttrList/', PersonalAttrViewList.as_view(), name='getUserAttrList'),
     url(r'^api/attr/', PersonalAttrView.as_view(), name='attr'),
     url(r'^api/user/', ApiLoginView.as_view(), name='userInfo'),
-    url(r'^api/token/', Tokens.as_view(), name='tokenInfo')
+    url(r'^api/token/', Tokens.as_view(), name='tokenInfo'),
+    url(r'^api/hut/', HutView.as_view(), name="hut"),
+    url(r'^api/hutList/', HutViewList.as_view(), name="hutList")
 
 ]

@@ -5,6 +5,8 @@ const getters = {
   device: state => state.app.device,
   visitedViews: state => state.tagsView.visitedViews,
   cachedViews: state => state.tagsView.cachedViews,
+
+  user: state => state.user.user,
   token: state => state.user.token,
   avatar: state => state.user.avatar,
   name: state => state.user.name,
@@ -12,6 +14,11 @@ const getters = {
   status: state => state.user.status,
   roles: state => state.user.roles,
   setting: state => state.user.setting,
+  birday: state => state.user.birday,
+  gender: state => state.user.gender,
+  addres: state => state.user.addres,
+  mobile: state => state.user.mobile,
+
   permission_routers: state => state.permission.routers,
   addRouters: state => state.permission.addRouters,
   errorLogs: state => state.errorLog.logs
