@@ -234,11 +234,29 @@ export const asyncRouterMap = [
         hidden: true
       },
       {
+        /* 之后考虑在此处path中再添加小屋id */
         path: 'edit/:annalid/:zjid',
         component: () => import('@/views/zc/edit'),
         name: 'EditEvaluate',
         meta: { title: 'EditEvaluate', icon: 'edit' },
         hidden: true
+      }
+    ]
+  },
+
+  {
+    path: '/todaysMust',
+    component: Layout,
+    name: 'TodaysMust',
+    meta: {
+      title: 'todaysMust'
+    },
+    children: [
+      {
+        path: 'view',
+        component: () => import('@/views/todaysMust/view'),
+        name: 'ViewTodaysMust',
+        meta: { title: 'ViewTodaysMust', icon: 'list' }
       }
     ]
   },

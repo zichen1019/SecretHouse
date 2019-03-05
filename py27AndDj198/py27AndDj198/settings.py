@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     'operation',
     'xadmin',
     'crispy_forms',
-    'captcha'
+    'captcha',
+    'todaysMust'
 ]
 
 AUTH_USER_MODEL = "users.UserProfile"

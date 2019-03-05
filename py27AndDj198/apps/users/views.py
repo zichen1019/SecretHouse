@@ -20,8 +20,9 @@ from django.forms.models import model_to_dict
 from .forms import LoginForm, RegisterForm
 from .models import UserProfile, UserAttr
 from utils.email_send import send_register_email
+
 from utils.querySetUtils import QuerySetUtils
-from utils.jsonUtils import JsonUtils
+from utils.jsonUtils import JsonDateUtils
 
 # Create your views here.
 
@@ -102,7 +103,7 @@ class PersonalAttrView(View):
             attr = QuerySetUtils.ToList(userAttrs)
             # 将字典中的日期字段转化为str，否则json无法格式化.
             # attr[0]['add_time'] = attr[0]['add_time'].strftime("%Y-%m-%d %H:%M:%S")
-            attr = JsonUtils.fmtDate(attr)
+            attr = JsonDateUtils.fmtDate(attr)
             res = {
                 'success': True,
                 'attribute': attr[0]

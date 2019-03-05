@@ -9,7 +9,7 @@ from django.http import HttpResponse, JsonResponse
 # 将model转化为dict
 from django.forms.models import model_to_dict
 from utils.querySetUtils import QuerySetUtils
-from utils.jsonUtils import JsonUtils
+from utils.jsonUtils import JsonDateUtils
 
 from .models import Hut
 from users.models import UserProfile

@@ -34,7 +34,7 @@
                                                   <el-button type="primary" size="mini" circle icon="el-icon-more"></el-button>
                                               </span>
                                               <el-dropdown-menu slot="dropdown">
-                                                  <router-link :to="'/zc/edit/'+NanProgress.id">
+                                                  <router-link :to="'/zc/edit/'+NanProgress.id+'/'+nanZJ.user">
                                                     <el-dropdown-item>
                                                         <el-button class="dorpdownItem" circle size="mini" icon="el-icon-edit"></el-button>
                                                     </el-dropdown-item>
@@ -91,7 +91,7 @@
                                                   <el-button type="primary" size="mini" circle icon="el-icon-more"></el-button>
                                               </span>
                                               <el-dropdown-menu slot="dropdown">
-                                                  <router-link :to="'/zc/edit/'+NvProgress.id">
+                                                  <router-link :to="'/zc/edit/'+NvProgress.id+'/'+nvZJ.user">
                                                     <el-dropdown-item>
                                                         <el-button class="dorpdownItem" circle size="mini" icon="el-icon-edit"></el-button>
                                                     </el-dropdown-item>

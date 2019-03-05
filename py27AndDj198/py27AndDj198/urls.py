@@ -20,6 +20,7 @@ import xadmin
 
 from users.views import *
 from hut.views import *
+from todaysMust.views import TodaysMustView
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
@@ -33,6 +34,7 @@ urlpatterns = [
     url(r'^api/user/', ApiLoginView.as_view(), name='userInfo'),
     url(r'^api/token/', Tokens.as_view(), name='tokenInfo'),
     url(r'^api/hut/', HutView.as_view(), name="hut"),
-    url(r'^api/hutList/', HutViewList.as_view(), name="hutList")
+    url(r'^api/hutList/', HutViewList.as_view(), name="hutList"),
+    url(r'^api/todaysMust/', TodaysMustView.as_view(), name="todaysMust")
 
 ]

@@ -112,6 +112,7 @@ export default {
     title: 'Title',
     importance: 'Imp',
     type: 'Type',
+    state: 'State',
     remark: 'Remark',
     search: 'Search',
     add: 'Add',
